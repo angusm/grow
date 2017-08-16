@@ -11,8 +11,8 @@ import platform
 import re
 import sys
 import tempfile
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import zipfile
 
 DOWNLOAD_URL_FORMAT = 'https://github.com/grow/grow/releases/download/{version}/{name}'
@@ -27,13 +27,13 @@ if 'Linux' in platform.system():
 elif 'Darwin' in platform.system():
   PLATFORM = 'mac'
 else:
-  print ('{} is not a supported platform. Please file an issue at '
-         'https://github.com/grow/grow/issues'.format(sys.platform))
+  print(('{} is not a supported platform. Please file an issue at '
+         'https://github.com/grow/grow/issues'.format(sys.platform)))
   sys.exit(-1)
 
 
 def hai(text, *args):
-  print text.format(*args, **{
+  print((text.format(*args, **{
     'blue': '\033[0;34m',
     '/blue': '\033[0;m',
     'red': '\033[0;31m',
@@ -44,17 +44,17 @@ def hai(text, *args):
     '/yellow': '\033[0;m',
     'white': '\033[0;37m',
     '/white': '\033[0;m',
-  })
+  })))
 
 
 def orly(text):
-  resp = raw_input(text)
+  resp = eval(input(text))
   return resp.lower() == 'y'
 
 
 def find_conflicting_aliases(existing_aliases, bin_path):
   files_to_alias = {}
-  for filename, paths in existing_aliases.iteritems():
+  for filename, paths in list(existing_aliases.items()):
     conflicting = [path for path in paths if path != bin_path]
     if conflicting:
       files_to_alias[filename] = conflicting
@@ -62,7 +62,7 @@ def find_conflicting_aliases(existing_aliases, bin_path):
 
 
 def find_matching_alias(existing_aliases, bin_path):
-  for filename, paths in existing_aliases.iteritems():
+  for filename, paths in list(existing_aliases.items()):
     matching = [path for path in paths if path == bin_path]
     if matching:
       return filename
@@ -92,13 +92,13 @@ def get_existing_aliases():
 
 
 def install(rc_path=None, bin_path=None, force=False):
-  resp = json.loads(urllib.urlopen(RELEASES_API).read())
+  resp = json.loads(urllib.request.urlopen(RELEASES_API).read())
   try:
     release = resp[0]
   except KeyError:
-    print 'There was a problem accessing the GitHub Releases API.'
+    print('There was a problem accessing the GitHub Releases API.')
     if 'message' in resp:
-      print resp['message']
+      print((resp['message']))
     sys.exit(-1)
 
   version = release['tag_name']
@@ -108,8 +108,8 @@ def install(rc_path=None, bin_path=None, force=False):
       asset = each_asset
       break
   if asset is None:
-    print 'Release not yet available for platform: {}.'.format(platform.system())
-    print 'Please try again in a few minutes.'
+    print(('Release not yet available for platform: {}.'.format(platform.system())))
+    print('Please try again in a few minutes.')
     sys.exit(-1)
 
   download_url = DOWNLOAD_URL_FORMAT.format(version=version, name=asset['name'])
@@ -144,7 +144,7 @@ def install(rc_path=None, bin_path=None, force=False):
       hai('Aborted installation.')
       sys.exit(-1)
 
-  remote = urllib2.urlopen(download_url)
+  remote = urllib.request.urlopen(download_url)
   try:
     hai('Downloading from {}'.format(download_url))
     local, temp_path = tempfile.mkstemp()
@@ -172,7 +172,7 @@ def install(rc_path=None, bin_path=None, force=False):
     fp.close()
     hai('{blue}[✓]{/blue} {green}Installed Grow SDK to:{/green} {}', bin_path)
     stat = os.stat(bin_path)
-    os.chmod(bin_path, stat.st_mode | 0111)
+    os.chmod(bin_path, stat.st_mode | 0o111)
   finally:
     os.remove(temp_path)
 

@@ -1,4 +1,4 @@
-import cStringIO
+import io
 import errno
 import logging
 import os
@@ -49,13 +49,13 @@ def init(pod, theme_url, force=False):
 class MemoryObjectStore(object_store.MemoryObjectStore):
 
     def add_pack(self):
-        content = cStringIO.StringIO()
+        content = io.StringIO()
 
         def abort():
             pass
 
         def store():
-            temp_file = cStringIO.StringIO(content.getvalue())
+            temp_file = io.StringIO(content.getvalue())
             pack_data = pack.PackData.from_file(temp_file, content.tell())
             for obj in pack.PackInflater.for_pack_data(pack_data):
                 self.add_object(obj)
@@ -73,7 +73,7 @@ class MemoryRepo(repo.MemoryRepo):
 
     def clone(self, client):
         refs = client.fetch('', self)
-        for name, ref in refs.iteritems():
+        for name, ref in refs.items():
             self.refs.add_if_new(name, ref)
 
     def get_content(self, filename, commit_id=None):

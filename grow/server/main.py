@@ -6,7 +6,7 @@ import os
 import re
 import sys
 import traceback
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import jinja2
 import webob
 # NOTE: exc imported directly, webob.exc doesn't work when frozen.
@@ -61,7 +61,7 @@ def serve_console(pod, request, values):
 
 
 def serve_pod(pod, request, values):
-    path = urllib.unquote(request.path)  # Support escaped paths.
+    path = urllib.parse.unquote(request.path)  # Support escaped paths.
     controller, params = pod.routes.match(path, request.environ)
     controller.validate(params)
     headers = controller.get_http_headers(params)

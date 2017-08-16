@@ -18,10 +18,10 @@ SLUG_REGEX = re.compile(r'[^A-Za-z0-9-._~]+')
 def _deep_gettext(ctx, fields):
     if isinstance(fields, dict):
         new_dct = {}
-        for key, val in fields.iteritems():
+        for key, val in fields.items():
             if isinstance(val, (dict, list, set)):
                 new_dct[key] = _deep_gettext(ctx, val)
-            elif isinstance(val, basestring):
+            elif isinstance(val, str):
                 new_dct[key] = _gettext_alias(ctx, val)
             else:
                 new_dct[key] = val
@@ -30,7 +30,7 @@ def _deep_gettext(ctx, fields):
         for i, val in enumerate(fields):
             if isinstance(val, (dict, list, set)):
                 fields[i] = _deep_gettext(ctx, val)
-            elif isinstance(val, basestring):
+            elif isinstance(val, str):
                 fields[i] = _gettext_alias(ctx, val)
             else:
                 fields[i] = val
@@ -52,7 +52,7 @@ def jsonify(_ctx, obj, *args, **kwargs):
 def markdown_filter(value):
     """Filters content through a markdown processor."""
     try:
-        if isinstance(value, unicode):
+        if isinstance(value, str):
             value = value.decode('utf-8')
         value = value or ''
         return markdown.markdown(value)
@@ -77,7 +77,7 @@ def relative_filter(ctx, path):
 @jinja2.contextfilter
 def render_filter(ctx, template):
     """Creates jinja template from string and renders."""
-    if isinstance(template, basestring):
+    if isinstance(template, str):
         template = ctx.environment.from_string(template)
     return template.render(ctx)
 
@@ -95,7 +95,7 @@ def shuffle_filter(_ctx, seq):
 
 def slug_filter(value):
     """Filters string to remove url unfriendly characters."""
-    return unicode(u'-'.join(SLUG_REGEX.split(value.lower())).strip(u'-'))
+    return str('-'.join(SLUG_REGEX.split(value.lower())).strip('-'))
 
 
 def wrap_locale_context(func):

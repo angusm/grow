@@ -21,7 +21,7 @@ class Menu(object):
 
     def iteritems(self):
         """Iterate through items."""
-        return self.items.iteritems()
+        return iter(self.items.items())
 
     def _recursive_build(self, tree, parent, nodes):
         children = [n for n in nodes if n.parent == parent]
@@ -41,7 +41,7 @@ def categories(collection=None, reverse=None, recursive=True,
     """Retrieve catagories from the pod."""
     if isinstance(collection, collection_lib.Collection):
         collection = collection
-    elif isinstance(collection, basestring):
+    elif isinstance(collection, str):
         collection = _pod.get_collection(collection)
     else:
         text = '{} must be a Collection instance or a collection path, found: {}.'
@@ -79,7 +79,7 @@ def date(datetime_obj=None, _pod=None, **kwargs):
     _from = kwargs.get('from', None)
     if datetime_obj is None:
         datetime_obj = datetime.now()
-    elif isinstance(datetime_obj, basestring) and _from is not None:
+    elif isinstance(datetime_obj, str) and _from is not None:
         datetime_obj = datetime.strptime(datetime_obj, _from)
     return datetime_obj
 

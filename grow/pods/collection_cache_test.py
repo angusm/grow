@@ -15,14 +15,14 @@ class DocumentCacheTestCase(unittest.TestCase):
         col_cache = collection_cache.CollectionCache()
         col = self.pod.get_collection('pages')
         col_cache.add_collection(col)
-        self.assertEquals(col, col_cache.get_collection('pages'))
+        self.assertEqual(col, col_cache.get_collection('pages'))
 
     def test_add_document(self):
         col_cache = collection_cache.CollectionCache()
         doc = self.pod.get_doc('/content/pages/intro.md')
         col = doc.collection
         col_cache.add_document(doc)
-        self.assertEquals(doc, col_cache.get_document(
+        self.assertEqual(doc, col_cache.get_document(
             col, '/content/pages/intro.md', doc._locale_kwarg))
 
     def test_remove_by_path(self):
@@ -32,17 +32,17 @@ class DocumentCacheTestCase(unittest.TestCase):
         col_cache.add_document(doc)
 
         # Deleting a document's path removes the document.
-        self.assertEquals(doc, col_cache.get_document(
+        self.assertEqual(doc, col_cache.get_document(
             col, '/content/pages/intro.md', doc._locale_kwarg))
         col_cache.remove_by_path('/content/pages/intro.md')
-        self.assertEquals(None, col_cache.get_document(
+        self.assertEqual(None, col_cache.get_document(
             col, '/content/pages/intro.md', doc._locale_kwarg))
 
         # Deleting a collection blueprint removes the entire collection.
         col_cache.add_collection(col)
-        self.assertEquals(col, col_cache.get_collection('pages'))
+        self.assertEqual(col, col_cache.get_collection('pages'))
         col_cache.remove_by_path('/content/pages/_blueprint.yaml')
-        self.assertEquals(None, col_cache.get_collection('pages'))
+        self.assertEqual(None, col_cache.get_collection('pages'))
 
     def test_remove_collection(self):
         col_cache = collection_cache.CollectionCache()
@@ -51,16 +51,16 @@ class DocumentCacheTestCase(unittest.TestCase):
 
         # Test straight up remove.
         col_cache.add_collection(col)
-        self.assertEquals(col, col_cache.get_collection('pages'))
+        self.assertEqual(col, col_cache.get_collection('pages'))
         col_cache.remove_collection(col)
-        self.assertEquals(None, col_cache.get_collection('pages'))
+        self.assertEqual(None, col_cache.get_collection('pages'))
 
         # Test that documents in the collection are removed.
         col_cache.add_document(doc)
-        self.assertEquals(doc, col_cache.get_document(
+        self.assertEqual(doc, col_cache.get_document(
             col, '/content/pages/intro.md', doc._locale_kwarg))
         col_cache.remove_collection(col)
-        self.assertEquals(None, col_cache.get_document(
+        self.assertEqual(None, col_cache.get_document(
             col, '/content/pages/intro.md', doc._locale_kwarg))
 
     def test_remove_document(self):
@@ -68,10 +68,10 @@ class DocumentCacheTestCase(unittest.TestCase):
         doc = self.pod.get_doc('/content/pages/intro.md')
         col = doc.collection
         col_cache.add_document(doc)
-        self.assertEquals(doc, col_cache.get_document(
+        self.assertEqual(doc, col_cache.get_document(
             col, '/content/pages/intro.md', doc._locale_kwarg))
         col_cache.remove_document(doc)
-        self.assertEquals(None, col_cache.get_document(
+        self.assertEqual(None, col_cache.get_document(
             col, '/content/pages/intro.md', doc._locale_kwarg))
 
     def test_remove_document_locales(self):
@@ -81,31 +81,31 @@ class DocumentCacheTestCase(unittest.TestCase):
         doc_it = self.pod.get_doc('/content/pages/intro.md', 'it')
         col_cache.add_document(doc_it)
         col = doc.collection
-        self.assertEquals(doc, col_cache.get_document(
+        self.assertEqual(doc, col_cache.get_document(
             col, '/content/pages/intro.md', doc._locale_kwarg))
-        self.assertEquals(doc_it, col_cache.get_document(
+        self.assertEqual(doc_it, col_cache.get_document(
             col, '/content/pages/intro.md', doc_it._locale_kwarg))
         col_cache.remove_document_locales(doc)
-        self.assertEquals(None, col_cache.get_document(
+        self.assertEqual(None, col_cache.get_document(
             col, '/content/pages/intro.md', doc._locale_kwarg))
-        self.assertEquals(None, col_cache.get_document(
+        self.assertEqual(None, col_cache.get_document(
             col, '/content/pages/intro.md', doc_it._locale_kwarg))
 
     def test_get_collection(self):
         col_cache = collection_cache.CollectionCache()
-        self.assertEquals(None, col_cache.get_collection('pages'))
+        self.assertEqual(None, col_cache.get_collection('pages'))
         col = self.pod.get_collection('pages')
         col_cache.add_collection(col)
-        self.assertEquals(col, col_cache.get_collection('pages'))
+        self.assertEqual(col, col_cache.get_collection('pages'))
 
     def test_get_document(self):
         col_cache = collection_cache.CollectionCache()
         doc = self.pod.get_doc('/content/pages/intro.md')
         col = doc.collection
-        self.assertEquals(None, col_cache.get_document(
+        self.assertEqual(None, col_cache.get_document(
             col, '/content/pages/intro.md', doc._locale_kwarg))
         col_cache.add_document(doc)
-        self.assertEquals(doc, col_cache.get_document(
+        self.assertEqual(doc, col_cache.get_document(
             col, '/content/pages/intro.md', doc._locale_kwarg))
 
 

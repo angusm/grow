@@ -41,7 +41,7 @@ class DocumentsTestCase(unittest.TestCase):
         self.assertEqual('About page.', doc.body)
         self.assertEqual('<p>About page.</p>', doc.html)
         keys = ['$title', '$order', '$titles', 'key', 'root_key']
-        self.assertItemsEqual(keys, doc.fields.keys())
+        self.assertItemsEqual(keys, list(doc.fields.keys()))
 
         doc = self.pod.get_doc('/content/pages/home.yaml')
         keys = [
@@ -62,7 +62,7 @@ class DocumentsTestCase(unittest.TestCase):
             'yaml_data',
             'yaml_data@',
         ]
-        self.assertItemsEqual(keys, doc.fields.keys())
+        self.assertItemsEqual(keys, list(doc.fields.keys()))
         self.assertIsNone(doc.html)
 
         about = self.pod.get_doc('/content/pages/about.yaml')
@@ -83,25 +83,25 @@ class DocumentsTestCase(unittest.TestCase):
     def test_clean_localized_path(self):
         input = '/content/pages/about.yaml'
         expected = '/content/pages/about.yaml'
-        self.assertEquals(expected, documents.Document.clean_localized_path(
+        self.assertEqual(expected, documents.Document.clean_localized_path(
             input, None))
 
         input = '/content/pages/about@de.yaml'
         expected = '/content/pages/about@de.yaml'
-        self.assertEquals(expected, documents.Document.clean_localized_path(
+        self.assertEqual(expected, documents.Document.clean_localized_path(
             input, 'de'))
 
         input = '/content/pages/about@de.yaml'
         expected = '/content/pages/about.yaml'
-        self.assertEquals(expected, documents.Document.clean_localized_path(
+        self.assertEqual(expected, documents.Document.clean_localized_path(
             input, 'en'))
 
     def test_get_serving_path(self):
         about_doc = self.pod.get_doc('/content/pages/about.yaml')
-        self.assertEquals('/about/', about_doc.get_serving_path())
+        self.assertEqual('/about/', about_doc.get_serving_path())
 
         de_doc = self.pod.get_doc('/content/pages/about.yaml', locale='de')
-        self.assertEquals('/de_alias/about/', de_doc.get_serving_path())
+        self.assertEqual('/de_alias/about/', de_doc.get_serving_path())
 
     def test_locales(self):
         doc = self.pod.get_doc('/content/pages/contact.yaml')
@@ -161,7 +161,7 @@ class DocumentsTestCase(unittest.TestCase):
         docs = collection.list_docs()
         doc = self.pod.get_doc('/content/pages/contact.yaml')
         doc.next(docs)
-        self.assertRaises(ValueError, doc.next, [1, 2, 3])
+        self.assertRaises(ValueError, doc.__next__, [1, 2, 3])
         doc.prev(docs)
         self.assertRaises(ValueError, doc.prev, [1, 2, 3])
 
@@ -238,7 +238,7 @@ class DocumentsTestCase(unittest.TestCase):
         self.assertEqual('root_key_value', de_doc.root_key)
         self.assertEqual('root_key_value', fr_doc.root_key)
         keys = ['$title', '$order', '$titles', 'key', 'root_key']
-        self.assertItemsEqual(keys, fr_doc.fields.keys())
+        self.assertItemsEqual(keys, list(fr_doc.fields.keys()))
 
     def test_default_locale_override(self):
         pod = testing.create_pod()

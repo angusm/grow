@@ -68,7 +68,7 @@ class SassPreprocessor(base.BasePreprocessor):
                     logging.error(str(e))
                     return result
                 with open(css_fullname, 'w') as css_file:
-                    if isinstance(css, unicode):
+                    if isinstance(css, str):
                         css = css.encode('utf-8')
                     css_file.write(css)
                 result[sass_fullname] = css_fullname
@@ -77,7 +77,7 @@ class SassPreprocessor(base.BasePreprocessor):
                 subresult = self.build_directory(sass_fullname, css_fullname,
                               _root_sass, _root_css)
                 result.update(subresult)
-        for sass_path, out_path in result.iteritems():
+        for sass_path, out_path in result.items():
             self.logger.info(
                 'Compiled: {} -> {}'.format(sass_path.replace(self.root, ''),
                                            out_path.replace(self.root, '')))

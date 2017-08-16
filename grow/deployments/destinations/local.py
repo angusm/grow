@@ -35,7 +35,7 @@ class LocalDestination(base.BaseDestination):
         self.storage.delete(out_path)
 
     def write_file(self, path, content):
-        if isinstance(content, unicode):
+        if isinstance(content, str):
             content = content.encode('utf-8')
         out_path = os.path.join(self.out_dir, path.lstrip('/'))
         fp = self.storage.write(out_path, content)

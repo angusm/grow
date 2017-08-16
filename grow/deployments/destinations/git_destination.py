@@ -137,7 +137,7 @@ class GitDestination(base.BaseDestination):
         return out_path
 
     def write_file(self, path, content):
-        if isinstance(content, unicode):
+        if isinstance(content, str):
             content = content.encode('utf-8')
         out_path = os.path.join(self.repo_path, self.config.root_dir.lstrip('/'),
                                 path.lstrip('/'))

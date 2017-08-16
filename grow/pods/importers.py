@@ -1,6 +1,6 @@
 import collections
 from babel.messages import pofile
-import cStringIO
+import io
 import copy
 import errno
 import os
@@ -22,7 +22,7 @@ builtin_locales = {
     'zh-HK': 'zh_Hant_HK',
     'zh-TW': 'zh_Hant_TW',
 }
-for key, value in builtin_locales.iteritems():
+for key, value in builtin_locales.items():
     default_external_to_babel_locales[key].append(value)
 
 
@@ -108,7 +108,7 @@ class Importer(object):
         if self.pod.podspec.localization:
             if 'import_as' in self.pod.podspec.localization:
                 import_as = self.pod.podspec.localization['import_as']
-                for external_locale, babel_locales in import_as.iteritems():
+                for external_locale, babel_locales in import_as.items():
                     for babel_locale in babel_locales:
                         external_to_babel_locales[external_locale].append(
                             babel_locale)
@@ -122,7 +122,7 @@ class Importer(object):
                 existing_po_file = self.pod.open_file(pod_po_path)
                 existing_catalog = pofile.read_po(
                     existing_po_file, babel_locale)
-                po_file_to_merge = cStringIO.StringIO()
+                po_file_to_merge = io.StringIO()
                 po_file_to_merge.write(content)
                 po_file_to_merge.seek(0)
                 catalog_to_merge = pofile.read_po(

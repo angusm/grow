@@ -31,7 +31,7 @@ class DocumentFields(object):
         paths_to_keep_tagged = set()
 
         def visit(path, key, value):
-            if not isinstance(key, basestring):
+            if not isinstance(key, str):
                 return key, value
             if (path, key.rstrip('@')) in updated_localized_paths:
                 return False
@@ -67,7 +67,7 @@ class DocumentFields(object):
             resp = iterutils.default_exit(path, key, old_parent,
                                           new_parent, new_items)
             if paths_to_keep_tagged and isinstance(resp, dict):
-                for sub_key, value in resp.items():
+                for sub_key, value in list(resp.items()):
                     if not isinstance(value, list):
                         continue
                     new_key = '{}@'.format(sub_key)
@@ -84,7 +84,7 @@ class DocumentFields(object):
         return self._data.get(key, default)
 
     def keys(self):
-        return self._data.keys()
+        return list(self._data.keys())
 
     def update(self, updated):
         updated = DocumentFields.untag(

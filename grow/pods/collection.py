@@ -178,7 +178,7 @@ class Collection(object):
     @property
     def order(self):
         # Default to maxint so unordered collections go to the end.
-        return self.fields.get('$order', sys.maxint)
+        return self.fields.get('$order', sys.maxsize)
 
     @property
     def parent(self):

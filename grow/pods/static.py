@@ -315,6 +315,6 @@ class StaticController(controllers.BaseController):
 
 # Allow the yaml dump to write out a representation of the static file.
 def static_representer(dumper, data):
-    return dumper.represent_scalar(u'!g.static', data.pod_path)
+    return dumper.represent_scalar('!g.static', data.pod_path)
 
 yaml.SafeDumper.add_representer(StaticFile, static_representer)

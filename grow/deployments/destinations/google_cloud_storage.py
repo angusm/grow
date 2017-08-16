@@ -9,7 +9,7 @@ from grow.common import utils
 from grow.pods import env
 from protorpc import messages
 import boto
-import cStringIO
+import io
 import gcs_oauth2_boto_plugin
 import httplib2
 import logging
@@ -104,11 +104,11 @@ class GoogleCloudStorageDestination(base.BaseDestination):
         self.bucket.delete_key(file_key)
 
     def write_file(self, path, content, policy='public-read'):
-        if isinstance(content, unicode):
+        if isinstance(content, str):
             content = content.encode('utf-8')
         path = path.lstrip('/')
         path = path if path != '' else self.config.main_page_suffix
-        fp = cStringIO.StringIO()
+        fp = io.StringIO()
         fp.write(content)
         size = fp.tell()
         try:

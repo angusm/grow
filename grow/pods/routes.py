@@ -171,7 +171,7 @@ class Routes(object):
         return controllers_to_paths
 
     def get_doc(self, path, locale=None):
-        if isinstance(locale, basestring):
+        if isinstance(locale, str):
             locale = locales.Locale(locale)
         return self._paths_to_locales_to_docs.get(path, {}).get(locale)
 

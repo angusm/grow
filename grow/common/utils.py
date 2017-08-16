@@ -11,7 +11,7 @@ import re
 import sys
 import threading
 import time
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import yaml
 import bs4
 import html2text
@@ -91,7 +91,7 @@ def get_git_repo(root):
 
 def interactive_confirm(message, default=False, input_func=None):
     if input_func is None:
-        input_func = lambda m: raw_input(m).lower()
+        input_func = lambda m: input(m).lower()
 
     choices = 'Y/n' if default is True else 'y/N'
     message = '{} [{}]: '.format(message, choices)
@@ -140,7 +140,7 @@ class memoize(object):
         self.cache = {}
 
     def __call__(self, *args, **kwargs):
-        key = (args, frozenset(kwargs.items()))
+        key = (args, frozenset(list(kwargs.items())))
         try:
             return self.cache[key]
         except KeyError:
@@ -209,7 +209,7 @@ class memoize_tag(memoize):
 
 
 def every_two(l):
-    return zip(l[::2], l[1::2])
+    return list(zip(l[::2], l[1::2]))
 
 
 def make_yaml_loader(pod, doc=None):
@@ -279,13 +279,13 @@ def make_yaml_loader(pod, doc=None):
                 return pod.read_yaml(path)
             return self._construct_func(node, func)
 
-    YamlLoader.add_constructor(u'!_', YamlLoader.construct_gettext)
-    YamlLoader.add_constructor(u'!g.csv', YamlLoader.construct_csv)
-    YamlLoader.add_constructor(u'!g.doc', YamlLoader.construct_doc)
-    YamlLoader.add_constructor(u'!g.json', YamlLoader.construct_json)
-    YamlLoader.add_constructor(u'!g.static', YamlLoader.construct_static)
-    YamlLoader.add_constructor(u'!g.url', YamlLoader.construct_url)
-    YamlLoader.add_constructor(u'!g.yaml', YamlLoader.construct_yaml)
+    YamlLoader.add_constructor('!_', YamlLoader.construct_gettext)
+    YamlLoader.add_constructor('!g.csv', YamlLoader.construct_csv)
+    YamlLoader.add_constructor('!g.doc', YamlLoader.construct_doc)
+    YamlLoader.add_constructor('!g.json', YamlLoader.construct_json)
+    YamlLoader.add_constructor('!g.static', YamlLoader.construct_static)
+    YamlLoader.add_constructor('!g.url', YamlLoader.construct_url)
+    YamlLoader.add_constructor('!g.yaml', YamlLoader.construct_yaml)
     return YamlLoader
 
 
@@ -306,15 +306,15 @@ def dump_yaml(obj):
         obj, allow_unicode=True, width=800, default_flow_style=False)
 
 
-def slugify(text, delim=u'-'):
-    if not isinstance(text, basestring):
+def slugify(text, delim='-'):
+    if not isinstance(text, str):
         text = str(text)
     result = []
     for word in SLUG_REGEX.split(text.lower()):
         word = word.encode('translit/long')
         if word:
             result.append(word)
-    return unicode(delim.join(result))
+    return str(delim.join(result))
 
 
 class DummyDict(object):
@@ -346,7 +346,7 @@ def get_rows_from_csv(pod, path, locale=SENTINEL):
     rows = []
     for row in csv_lib.DictReader(fp):
         data = {}
-        for header, cell in row.iteritems():
+        for header, cell in row.items():
             if cell is None:
                 cell = ''
             data[header] = cell.decode('utf-8')
@@ -372,7 +372,7 @@ def clean_html(content, convert_to_markdown=False):
     _process_google_hrefs(soup)
     _process_google_comments(soup)
     # Support HTML fragments without body tags.
-    content = unicode(soup.body or soup)
+    content = str(soup.body or soup)
     if convert_to_markdown:
         h2t = html2text.HTML2Text()
         content = h2t.handle(content).strip()
@@ -404,14 +404,14 @@ def _clean_google_href(href):
     match = re.match(regex, href)
     if match:
         encoded_url = match.group(2)
-        return urllib.unquote(encoded_url)
+        return urllib.parse.unquote(encoded_url)
     return href
 
 
 def format_existing_data(old_data, new_data, preserve=None, key_to_update=None):
     if old_data:
         if preserve == 'builtins':
-            for key in old_data.keys():
+            for key in list(old_data.keys()):
                 if not key.startswith('$'):
                     del old_data[key]
         if key_to_update:

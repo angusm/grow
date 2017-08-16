@@ -398,14 +398,14 @@ class GoogleSheetsTranslatorMockTestCase(unittest.TestCase):
                         '3': {
                             'condition': {
                                 'values': [{
-                                    'userEnteredValue': u'/views/home.html'
+                                    'userEnteredValue': '/views/home.html'
                                 }],
                                 'type': 'TEXT_CONTAINS'
                             }
                         }
                     },
                     'filterViewId': 63754494,
-                    'title': u'/views/home.html'
+                    'title': '/views/home.html'
                 }
             }
         }, requests)

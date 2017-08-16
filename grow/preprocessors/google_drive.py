@@ -9,7 +9,7 @@
     to markdown.
 """
 
-import cStringIO
+import io
 import csv
 import json
 import logging
@@ -75,7 +75,7 @@ class GoogleDocsPreprocessor(BaseGooglePreprocessor):
             logger.error(text.format(path))
             logger.error('Received: {}'.format(resp))
             return
-        for mimetype, url in resp['exportLinks'].iteritems():
+        for mimetype, url in resp['exportLinks'].items():
             if not mimetype.endswith('html'):
                 continue
             resp, content = service._http.request(url)
@@ -180,7 +180,7 @@ class GoogleSheetsPreprocessor(BaseGooglePreprocessor):
             if raise_errors:
                 raise base.PreprocessorError(text)
             return
-        for mimetype, url in resp['exportLinks'].iteritems():
+        for mimetype, url in resp['exportLinks'].items():
             if not mimetype.endswith('csv'):
                 continue
             if gid is not None:
@@ -246,7 +246,7 @@ class GoogleSheetsPreprocessor(BaseGooglePreprocessor):
         """Formats content into either a CSV (text), list, or dictionary."""
         convert_to = cls.get_convert_to(path)
         if convert_to in ['.json', '.yaml', '.yml']:
-            fp = cStringIO.StringIO()
+            fp = io.StringIO()
             fp.write(content)
             fp.seek(0)
             if format_as == 'map':
@@ -287,7 +287,7 @@ class GoogleSheetsPreprocessor(BaseGooglePreprocessor):
     def _normalize_formatted_content(self, fields):
         # A hack that sends fields through a roundtrip json serialization to
         # avoid encoding issues with injected output from Google Sheets.
-        fp = cStringIO.StringIO()
+        fp = io.StringIO()
         json.dump(fields, fp)
         fp.seek(0)
         return json.load(fp)

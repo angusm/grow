@@ -19,7 +19,7 @@ class TranslationStats(object):
     @property
     def untranslated(self):
         tracking = {}
-        for locale, messages in self._untranslated.iteritems():
+        for locale, messages in self._untranslated.items():
             if locale not in tracking:
                 tracking[locale] = {}
             for message in messages:
@@ -36,7 +36,7 @@ class TranslationStats(object):
     def export_untranslated_catalogs(self, pod, dir_path=None):
         """Export the untranslated messages into catalogs based on locale."""
         locale_to_catalog = {}
-        for locale, messages in self.untranslated.iteritems():
+        for locale, messages in self.untranslated.items():
             if locale not in locale_to_catalog:
                 locale_to_catalog[locale] = pod.catalogs.get(
                     locale, basename='untranslated.po', dir_path=dir_path)

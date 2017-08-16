@@ -48,7 +48,7 @@ class TocExtension(toc.TocExtension):
             val = config.get_assigned_value(item.name)
             if val is not None:
                 config_kwargs[item.name] = val
-        configs = config_kwargs.items()
+        configs = list(config_kwargs.items())
         # HTML5 allows all non-space characters for a valid id.
         configs += [(
             'slugify',

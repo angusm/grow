@@ -227,7 +227,7 @@ class PodTest(unittest.TestCase):
             '/static/file.txt',
             '/static/extensionless',
         ]
-        paths = pod.dump().keys()
+        paths = list(pod.dump().keys())
         self.assertItemsEqual(expected, paths)
 
         # Verify export does not append suffix.
@@ -236,7 +236,7 @@ class PodTest(unittest.TestCase):
             '/static/file.txt',
             '/static/extensionless',
         ]
-        paths = pod.export().keys()
+        paths = list(pod.export().keys())
         self.assertItemsEqual(expected, paths)
 
 

@@ -166,7 +166,7 @@ class BaseDestination(object):
             self.pod, dir_path=dir_path)
         self.pod.delete_files([dir_path], recursive=True,
                               pattern=re.compile(r'\.po$'))
-        for _, catalog in catalogs.iteritems():
+        for _, catalog in catalogs.items():
             catalog.save()
         logging.info('Untranslated strings exported to {}'.format(dir_path))
 

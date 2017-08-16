@@ -18,7 +18,7 @@ def routes(pod_path):
         name = str(route.endpoint)
         paths = route.endpoint.list_concrete_paths()
         controllers_to_paths[name].update(paths)
-    for controller, paths in controllers_to_paths.iteritems():
+    for controller, paths in controllers_to_paths.items():
         paths = sorted(paths)
         if len(paths) > 1 or True:
             out.append(controller)

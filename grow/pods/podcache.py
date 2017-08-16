@@ -37,7 +37,7 @@ class PodCache(object):
             self.KEY_GLOBAL, write_to_file=False, can_reset=True)
 
         existing_object_caches = yaml.get(self.KEY_OBJECTS, {})
-        for key, item in existing_object_caches.iteritems():
+        for key, item in existing_object_caches.items():
             self.create_object_cache(key, **item)
 
     @property
@@ -90,7 +90,7 @@ class PodCache(object):
         self._document_cache.reset()
 
         # Only reset the object caches if permitted.
-        for meta in self._object_caches.itervalues():
+        for meta in self._object_caches.values():
             if meta['can_reset'] or force:
                 meta['cache'].reset()
 
@@ -102,7 +102,7 @@ class PodCache(object):
 
         # Write out any of the object caches that request to be exported to
         # file.
-        for key, meta in self._object_caches.iteritems():
+        for key, meta in self._object_caches.items():
             if meta['write_to_file']:
                 yaml[self.KEY_OBJECTS][key] = {
                     'can_reset': meta['can_reset'],

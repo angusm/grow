@@ -18,11 +18,11 @@ class Stats(object):
 
     def get_num_files_per_type(self):
         file_counts = collections.defaultdict(int)
-        for path in self.paths_to_contents.keys():
+        for path in list(self.paths_to_contents.keys()):
             ext = os.path.splitext(path)[-1]
             file_counts[ext] += 1
         ms = []
-        for ext, count in file_counts.iteritems():
+        for ext, count in file_counts.items():
             ms.append(messages.FileCountMessage(ext=ext, count=count))
         return ms
 

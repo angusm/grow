@@ -27,7 +27,7 @@ class DependencyGraph(object):
     def add_all(self, path_to_dependencies):
         """Add all from a dict of paths to dependencies."""
 
-        for key, value in path_to_dependencies.iteritems():
+        for key, value in path_to_dependencies.items():
             self.add_references(key, value)
 
     def add(self, source, reference):

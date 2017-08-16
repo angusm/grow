@@ -6,7 +6,7 @@ import os
 import platform
 import subprocess
 import sys
-import urlparse
+import urllib.parse
 import requests
 import semantic_version
 from grow.common import config
@@ -89,7 +89,7 @@ def check_for_sdk_updates(auto_update_prompt=False):
     logging.info('  Your version: {}, latest version: {}'.format(
         colorize(yours, ansi=226), colorize(theirs, ansi=82)))
     if utils.is_packaged_app() and auto_update_prompt:
-        if raw_input('Auto update now? [y/N]: ').lower() != 'y':
+        if input('Auto update now? [y/N]: ').lower() != 'y':
             return
         if subprocess.call(INSTALLER_COMMAND, shell=True) == 0:
             logging.info('Restarting...')
@@ -103,7 +103,7 @@ def check_for_sdk_updates(auto_update_prompt=False):
     else:
         logging.info('  Update using: ' +
                      colorize('pip install --upgrade grow', ansi=200))
-    print ''
+    print('')
 
 
 def get_popen_args(pod):
@@ -150,7 +150,7 @@ def has_gerrit_remote(pod):
         return False
     for remote in repo.remotes:
         url = remote.config_reader.get('url')
-        result = urlparse.urlparse(url)
+        result = urllib.parse.urlparse(url)
         if result.netloc.endswith(KNOWN_GERRIT_HOSTS):
             return True
 

@@ -261,7 +261,7 @@ class Pod(object):
         else:
             routes = self.get_routes()
         paths = []
-        for items in routes.get_locales_to_paths().values():
+        for items in list(routes.get_locales_to_paths().values()):
             paths += items
         output = self.export_paths(
             paths, routes, suffix=suffix, append_slashes=append_slashes)
@@ -387,7 +387,7 @@ class Pod(object):
         destination_configs = self.yaml['deployments']
         if nickname not in destination_configs:
             text = 'No deployment named {}. Valid deployments: {}.'
-            keys = ', '.join(destination_configs.keys())
+            keys = ', '.join(list(destination_configs.keys()))
             raise ValueError(text.format(nickname, keys))
         deployment_params = destination_configs[nickname]
         kind = deployment_params.pop('destination')
@@ -550,7 +550,7 @@ class Pod(object):
     def list_deployments(self):
         destination_configs = self.yaml['deployments']
         results = []
-        for name in destination_configs.keys():
+        for name in list(destination_configs.keys()):
             results.append(self.get_deployment(name))
         return results
 
@@ -607,7 +607,7 @@ class Pod(object):
 
     def normalize_locale(self, locale, default=None):
         locale = locale or default or self.podspec.default_locale
-        if isinstance(locale, basestring):
+        if isinstance(locale, str):
             locale = locales.Locale.parse(locale)
         if locale is not None:
             locale.set_alias(self)

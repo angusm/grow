@@ -49,7 +49,7 @@ class ObjectCache(object):
 
         results = {}
 
-        for key, value in self._cache.iteritems():
+        for key, value in self._cache.items():
             if pattern.search(key) is not None:
                 results[key] = value
 

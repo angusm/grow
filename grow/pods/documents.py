@@ -162,8 +162,8 @@ class Document(object):
             else:
                 formatters['date'] = self.date
         if '|lower' in path_format:
-            for key, value in formatters.items():
-                if isinstance(value, basestring):
+            for key, value in list(formatters.items()):
+                if isinstance(value, str):
                     formatters['{}|lower'.format(key)] = value.lower()
         return path_format.format(**formatters).replace('//', '/')
 
@@ -467,6 +467,6 @@ class Document(object):
 
 # Allow the yaml dump to write out a representation of the document.
 def doc_representer(dumper, data):
-    return dumper.represent_scalar(u'!g.doc', data.pod_path)
+    return dumper.represent_scalar('!g.doc', data.pod_path)
 
 yaml.SafeDumper.add_representer(Document, doc_representer)

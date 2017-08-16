@@ -5,7 +5,7 @@ from grow.pods import env
 from protorpc import messages
 import logging
 import os
-import urlparse
+import urllib.parse
 
 
 if common_utils.is_appengine():
@@ -108,7 +108,7 @@ class WebReviewDestination(base.BaseDestination):
             if 'fileset' in finalize_response:
                 url = finalize_response['fileset']['url']
                 # Append the homepage path to the staging link.
-                result = urlparse.urlparse(url)
+                result = urllib.parse.urlparse(url)
                 if not result.path and self.pod and self.pod.get_home_doc():
                   home_doc = self.pod.get_home_doc()
                   url = url.rstrip('/') + home_doc.url.path
@@ -141,8 +141,8 @@ class WebReviewDestination(base.BaseDestination):
 
     def write_files(self, paths_to_contents):
         try:
-            for path, content in paths_to_contents.iteritems():
-                if isinstance(content, unicode):
+            for path, content in paths_to_contents.items():
+                if isinstance(content, str):
                     paths_to_contents[path] = content.encode('utf-8')
             paths_to_contents, errors = self.webreview.write(paths_to_contents)
             if errors:
